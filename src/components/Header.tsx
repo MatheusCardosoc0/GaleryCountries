@@ -1,8 +1,14 @@
 import React from 'react'
 import { GiSun } from 'react-icons/gi'
 import { BiSearchAlt } from 'react-icons/bi'
+import { BsArrow90DegLeft, BsArrowBarLeft, BsFillArrowLeftSquareFill } from "react-icons/bs"
 
-const Header = () => {
+interface headerProps {
+  state: boolean
+  onclick: () => void
+}
+
+const Header = ({ state, onclick }: headerProps) => {
   return (
     <div className='fixed w-full z-10'>
       <header className='flex justify-between px-2 py-5 bg-slate-900 drop-shadow-[0px_3px_20px] text-slate-200'>
@@ -36,12 +42,14 @@ const Header = () => {
       </header>
 
       <div className='bg-slate-500'>
-        <select className='text-black'>
-          <option>Maior polpulação</option>
-          <option>Menor polpulação</option>
-          <option>Maior area</option>
-          <option>Menor area</option>
-        </select>
+        {state ?
+          <select className='text-black'>
+            <option>Maior polpulação</option>
+            <option>Menor polpulação</option>
+            <option>Maior area</option>
+            <option>Menor area</option>
+          </select> :
+          <button onClick={onclick} className='bg-slate-200 p-2 flex items-center gap-6'><BsFillArrowLeftSquareFill /> Voltar</button>}
       </div>
     </div>
   )

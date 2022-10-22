@@ -1,14 +1,20 @@
 import React from 'react'
+import { CountryProps } from '../main'
 
-const Countries = () => {
+interface countryProps {
+  onclick: () => void
+  country: CountryProps 
+}
+
+const Countries = ({ onclick, country }: countryProps) => {
   return (
-    <button className='brightness-125 text-slate-200 bg-zinc-800 p-4 items-center w-[18rem]'>
-      <img className='w-[16rem]' src='https://www.curitiba.pr.leg.br/atividade-parlamentar/legislacao/imagens/bandeira-do-brasil.png/image' />
-     <div className='text-start'>
-     <p>Nome</p>
-      <p>População</p>
-      <p>Area total</p>
-     </div>
+    <button onClick={onclick} className='brightness-125 text-slate-200 bg-zinc-800 p-4 items-center w-[18rem]'>
+      <img className='w-[16rem]' src={country.flags.svg} />
+      <div className='text-start'>
+        <p>{country.name.common}</p>
+        <p>população: {country.population}</p>
+        <p>Area: {country.area}</p>
+      </div>
     </button>
   )
 }
