@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Countries from './components/Countries'
 import CountryStats from './components/CountryStats'
 import Header from './components/Header'
+import { useStateContext } from './context/Mode'
 import { CountryProps } from './main'
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
   const [countryStats, setCountryStats] = useState<CountryProps | null>(null)
   const [searchActive, setSearchActive] = useState(false)
   const [searchFilter, setSearchFilter] = useState(false)
+  const {mode} = useStateContext()
 
   const fetchData = async () => {
     const response = await fetch('https://restcountries.com/v3.1/all')
@@ -20,6 +22,7 @@ const App = () => {
 
     setCountriesCurrent(json)
     setCountries(json)
+    setResultBuscas(json)
   }
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const App = () => {
 
   return (
 
-    <div className='text-2xl bg-zinc-900 h-screen'>
+    <body className={` ${mode? 'bg-stone-200' : 'bg-zinc-900'}`}>
       <Header onclick={() => setshowCountryStatats(true)} state={showCountryStatats} contries={countries} setContries={setCountries} setResultBusca={setResultBuscas} setSearchActive={setSearchActive} setSearchFilter={setSearchFilter} countriesCurrent={countriesCurrent} />
       <div className='pt-[12rem] flex justify-center'>
 
@@ -52,14 +55,14 @@ const App = () => {
                 <Countries country={country} onclick={() => dispatchCountry(country)} />
               )) :
 
-              countries?.map(country => (
+              resultBuscas?.map(country => (
                 <Countries country={country} onclick={() => dispatchCountry(country)} />))}
           </div>
 
           :
           <CountryStats country={countryStats} />}
       </div>
-    </div>
+    </body>
   )
 }
 

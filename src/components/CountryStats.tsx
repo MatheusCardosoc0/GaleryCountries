@@ -1,4 +1,5 @@
 import React from 'react'
+import { useStateContext } from '../context/Mode'
 import { CountryProps } from '../main'
 
 interface countryStatsProps {
@@ -7,21 +8,21 @@ interface countryStatsProps {
 
 const CountryStats = ({country}: countryStatsProps) => {
 
-  console.log(country?.languages)
+  const {mode} = useStateContext()
 
   return (
-    <div className=' text-slate-200 flex brightness-125'>
-      <img className='w-[30rem]' src={country?.flags.svg} />
-      <div className='text-start flex gap-16 px-2 pt-12 bg-zinc-800'>
+    <div className={`w-[18rem] md:w-[40rem] mb-12 ${mode? 'bg-slate-400 text-black': 'bg-zinc-800 text-slate-200'} flex flex-col brightness-125`}>
+      <img className='' src={country?.flags.svg} />
+      <div className='text-start flex px-8 py-12 justify-between  text-base md:text-3xl'>
         <div className=' flex flex-col gap-4'>
-          <p>{country?.name.common}</p>
-          <p>{country?.population}</p>
-          <p>{country?.area}</p>
+          <p>nome: <b>{country?.name.common}</b></p>
+          <p>população: <b>{country?.population}</b></p>
+          <p>área: <b>{country?.area}</b></p>
         </div>
         <div className=' flex flex-col gap-4'>
-          <p>{country?.capital}</p>
-          <p>{country?.independent? 'Sim' : 'Não'}</p>
-          <p>{country?.region}</p>
+          <p>capital: <b>{country?.capital}</b></p>
+          <p>independente? <b>{country?.independent? 'Sim' : 'Não'}</b></p>
+          <p>região: <b>{country?.region}</b></p>
         </div>
       </div>
     </div>

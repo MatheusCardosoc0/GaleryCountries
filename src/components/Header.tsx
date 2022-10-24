@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { GiSun } from 'react-icons/gi'
+import { GiMoon, GiSun } from 'react-icons/gi'
 import { BiSearchAlt } from 'react-icons/bi'
 import { BsArrow90DegLeft, BsArrowBarLeft, BsFillArrowLeftSquareFill } from "react-icons/bs"
 import { CountryProps } from '../main'
+import { useStateContext } from '../context/Mode'
 
 interface headerProps {
   state: boolean
@@ -22,8 +23,11 @@ const Header = ({ state, onclick, contries, setContries, setResultBusca, setSear
   const [selectValueFilter, setSelectValueFilter] = useState('')
   const [selectValueRegion, setSelectValueRegion] = useState('')
 
+  const {setMode, mode} = useStateContext()
+
 
   useEffect(()=>{
+    setSearchFilter(true)
     if(searchCountry.length > 0){
       setSearchActive(true)
     const dados = new Array
@@ -41,117 +45,91 @@ const Header = ({ state, onclick, contries, setContries, setResultBusca, setSear
     }
   },[searchCountry])
 
-  console.log(contries)
 
-  function largestPopulation(){
+
+  function countryFilterAtributes(param: 'population' | 'area' , type: 'inc' | 'dec'){
     let newcountrues = contries
-    newcountrues.sort((a, b) =>  b.population - a.population)
+    if(param === 'population'){
+      if(type === 'dec'){
+        newcountrues.sort((a, b) =>   a.population - b.population )
+      }
+      if(type === 'inc'){
+        newcountrues.sort((a, b) =>  b.population - a.population)
+      }
+    }
+    else if(param === 'area'){
+      if(type === 'dec'){
+        newcountrues.sort((a, b) =>   a.area - b.area )
+      }
+      if(type === 'inc'){
+        newcountrues.sort((a, b) =>  b.area - a.area)
+      }
+    }
 
     setResultBusca(newcountrues)
     setSearchActive((prevActive : boolean) => !prevActive)
-  }
-
-  function largestArea(){
-    let newcountrues = contries
-    newcountrues.sort((a, b) =>  b.area - a.area)
-
-    setResultBusca(newcountrues)
-    setSearchActive((prevActive : boolean) => !prevActive)
-  }
-
-  function minPopulation(){
-    let newcountrues = contries
-    newcountrues.sort((a, b) =>   a.population - b.population )
-
-    setResultBusca(newcountrues)
-    setSearchActive((prevActive : boolean) => !prevActive)
-  }
-
-  function minArea(){
-    let newcountries = contries
-
-    newcountries.sort((a, b) => a.area - b.area)
-
-    setSearchActive((prevActive: boolean) => !prevActive)
-    setResultBusca(newcountries)
   }
 
   useEffect(() => {
+    setSearchFilter(true)
     if(selectValueFilter === '1'){
       let newcountrues = contries
+      setSearchFilter(false)
       setSearchCountry('')
   
       setResultBusca(newcountrues)
       setSearchActive((prevActive : boolean) => !prevActive)
     }
     if(selectValueFilter === '2'){
-      largestPopulation()
+      countryFilterAtributes('population', 'inc')
     }
     if(selectValueFilter === '3'){
-      minPopulation()
+      countryFilterAtributes('population', 'dec')
     }
     if(selectValueFilter === '4'){
-      largestArea()
+      countryFilterAtributes('area', 'inc')
     }
     if(selectValueFilter === '5'){
-      minArea()
+      countryFilterAtributes('area', 'dec')
     }
   },[selectValueFilter])
 
 
-  async function southAmerica(){
-    let newcountrues = contries.filter(country => country.region === 'Americas')
+  async function CountryFilterRegion(region: string){
+    let newcountrues = contries.filter(country => country.region === region)
 
     setResultBusca(newcountrues)
     setSearchActive((prevActive : boolean) => !prevActive)
-  }
-
-  function southAsia(){
-    let newcountrues = contries.filter(country => country.region === 'Asia')
-
-    setResultBusca(newcountrues)
-    setSearchActive((prevActive : boolean) => !prevActive)
-    
-  }
-
-  function southEurope(){
-    let newcountrues = contries.filter(country => country.region === 'Europe')
-
-    setResultBusca(newcountrues)
-    setSearchActive((prevActive : boolean) => !prevActive)
-    
-  }
-
-  function southOceania(){
-    let newcountrues = contries.filter(country => country.region === 'Oceania')
-
-    setResultBusca(newcountrues)
-    setSearchActive((prevActive : boolean) => !prevActive)
-    
   }
 
 
 
   useEffect(() => {
+    setSearchFilter(true)
    setContries(countriesCurrent)
     if(selectValueRegion === '1'){
       setSearchCountry('')
+      setSearchFilter(false)
     }
     if(selectValueRegion === '2'){
       setContries(countriesCurrent)
-      southEurope()
+      CountryFilterRegion('Europe')
     }
     if(selectValueRegion === '3'){
       setContries(countriesCurrent)
-      southAsia()
+      CountryFilterRegion('Asia')
     }
     if(selectValueRegion === '4'){
       setContries(countriesCurrent)
-      southAmerica()
+      CountryFilterRegion('Americas')
     }
     if(selectValueRegion === '5'){
       setContries(countriesCurrent)
-      southOceania()
+      CountryFilterRegion('Oceania')
+    }
+    if(selectValueRegion === '6'){
+      setContries(countriesCurrent)
+      CountryFilterRegion('Africa')
     }
   },[selectValueRegion])
 
@@ -161,39 +139,37 @@ const Header = ({ state, onclick, contries, setContries, setResultBusca, setSear
 
   return (
     <div className='fixed w-full z-10'>
-      <header className='flex justify-between px-2 py-5 bg-slate-900 drop-shadow-[0px_3px_20px] text-slate-200'>
+      <header className={`flex justify-between px-2 py-5 ${mode? 'bg-slate-200 text-slate-900' : 'bg-slate-900 text-slate-200'}  drop-shadow-[0px_3px_20px] `}>
         <section className='flex flex-col gap-2'>
-          <h1 className='text-3xl'>Galeria de paises</h1>
-          <span className='flex gap-3'>
-            <select className='text-black rounded-xl text-xl px-2 w-40' onChange={e => setSelectValueRegion(e.target.value)} >
+          <h1 className='md:text-3xl'>Galeria de paises</h1>
+          <span className='flex gap-3 '>
+            <select className={`${mode? 'bg-zinc-800 text-white': 'bg-white text-black' } rounded-xl w-20 text-sm  md:text-xl px-2 md:w-40` }onChange={e => setSelectValueRegion(e.target.value)} >
               <option value={"1"}>Todos</option>
               <option value={"2"}>Europa</option>
               <option value={"3"}>Asia</option>
               <option value={"4"}>Americas</option>
               <option value={"5"}>Oceania</option>
-              <option value={"6"}>Europa</option>
-              <option value={"7"}>Asia</option>
-              <option value={"8"}>Africa</option>
+              <option value={"6"}>Africa</option>
             </select>
-            <span className='bg-white flex items-center px-3 rounded-xl'>
-              <BiSearchAlt className='text-black' />
-              <input className='bg-transparent w-32 px-2 text-black' type={"text"} onChange={e => setSearchCountry(e.target.value)} value={searchCountry} />
+            <span className={`${mode? 'bg-zinc-700 text-white': 'bg-white text-black' } rounded-xl items-center flex px-3`}>
+              <BiSearchAlt className={`${mode? 'text-white' : 'text-black'}`} />
+              <input className='bg-transparent w-8 text-sm md:text-base md:w-32 px-2 text-black' type={"text"} onChange={e => setSearchCountry(e.target.value)} value={searchCountry} />
             </span>
           </span>
         </section>
-        <div className='flex gap-3 items-center'>
-          <p className='text-base'>White mode</p>
+        <button className='flex flex-col md:flex-row gap-3 items-center' onClick={() => setMode((prevMode: boolean) => !prevMode)}>
+          <p className='text-base'>{mode? 'Dark mode': 'White mode'}</p>
           <div className='bg-white p-1 rounded-full flex justify-center'>
-            <span className='text-yellow-500  text-3xl'>
-              <GiSun />
-            </span>
+            <div className={`${mode? 'text-black' : 'text-yellow-500'}  text-3xl`} >
+              {mode? <GiMoon /> : <GiSun />}
+            </div>
           </div>
-        </div>
+        </button>
       </header>
 
-      <div className='bg-slate-500'>
+      <div className={`${mode? 'bg-slate-300': 'bg-slate-500'}`}>
         {state ?
-          <select className='text-black' onChange={e => setSelectValueFilter(e.target.value)}>
+          <select className={`${mode? 'bg-zinc-700 text-white': 'bg-white text-black' }`} onChange={e => setSelectValueFilter(e.target.value)}>
             <option value={"1"}>Nenhum</option>
             <option value={"2"}>Maior polpulação</option>
             <option value={"3"}>Menor polpulação</option>
