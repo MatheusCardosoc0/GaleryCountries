@@ -8,12 +8,17 @@ const App = () => {
 
   const [showCountryStatats, setshowCountryStatats] = useState(true)
   const [countries, setCountries] = useState<CountryProps[]>([])
+  const [countriesCurrent, setCountriesCurrent] = useState<CountryProps[]>([])
+  const [resultBuscas, setResultBuscas] = useState<CountryProps[]>([])
   const [countryStats, setCountryStats] = useState<CountryProps | null>(null)
+  const [searchActive, setSearchActive] = useState(false)
+  const [searchFilter, setSearchFilter] = useState(false)
 
-  const fetchData = async() => {
+  const fetchData = async () => {
     const response = await fetch('https://restcountries.com/v3.1/all')
     const json = await response.json()
 
+    setCountriesCurrent(json)
     setCountries(json)
   }
 
@@ -23,26 +28,32 @@ const App = () => {
     } catch (error) {
       console.log(error)
     }
-  },[])
+  }, [])
 
-  function dispatchCountry(country: CountryProps){
+  function dispatchCountry(country: CountryProps) {
     setCountryStats(country)
     setshowCountryStatats(false)
 
   }
 
+  //console.log(countries)
+
 
   return (
 
     <div className='text-2xl bg-zinc-900 h-screen'>
-      <Header onclick={() => setshowCountryStatats(true)} state={showCountryStatats} />
+      <Header onclick={() => setshowCountryStatats(true)} state={showCountryStatats} contries={countries} setContries={setCountries} setResultBusca={setResultBuscas} setSearchActive={setSearchActive} setSearchFilter={setSearchFilter} countriesCurrent={countriesCurrent} />
       <div className='pt-[12rem] flex justify-center'>
 
         {showCountryStatats ?
           <div className='flex flex-wrap gap-8 justify-center'>
-            {countries?.map(country =>(
-              <Countries country={country} onclick={() => dispatchCountry(country)} />
-            ) )}
+            {searchActive ?
+              resultBuscas.map(country => (
+                <Countries country={country} onclick={() => dispatchCountry(country)} />
+              )) :
+
+              countries?.map(country => (
+                <Countries country={country} onclick={() => dispatchCountry(country)} />))}
           </div>
 
           :

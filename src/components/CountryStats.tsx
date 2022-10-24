@@ -11,7 +11,7 @@ const CountryStats = ({country}: countryStatsProps) => {
 
   return (
     <div className=' text-slate-200 flex brightness-125'>
-      <img className='w-[30rem]' src='https://www.curitiba.pr.leg.br/atividade-parlamentar/legislacao/imagens/bandeira-do-brasil.png/image' />
+      <img className='w-[30rem]' src={country?.flags.svg} />
       <div className='text-start flex gap-16 px-2 pt-12 bg-zinc-800'>
         <div className=' flex flex-col gap-4'>
           <p>{country?.name.common}</p>
@@ -20,7 +20,7 @@ const CountryStats = ({country}: countryStatsProps) => {
         </div>
         <div className=' flex flex-col gap-4'>
           <p>{country?.capital}</p>
-        
+          <p>{country?.independent? 'Sim' : 'Não'}</p>
           <p>{country?.region}</p>
         </div>
       </div>
