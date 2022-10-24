@@ -171,8 +171,8 @@ const Header = ({ state, onclick, contries, setContries, setResultBusca, setSear
         {state ?
           <select className={`${mode? 'bg-zinc-700 text-white': 'bg-white text-black' }`} onChange={e => setSelectValueFilter(e.target.value)}>
             <option value={"1"}>Nenhum</option>
-            <option value={"2"}>Maior polpulação</option>
-            <option value={"3"}>Menor polpulação</option>
+            <option value={"2"}>Maior população</option>
+            <option value={"3"}>Menor população</option>
             <option value={"4"}>Maior area</option>
             <option value={"5"}>Menor area</option>
           </select> :
