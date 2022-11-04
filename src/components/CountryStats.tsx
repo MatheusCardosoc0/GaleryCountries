@@ -10,6 +10,8 @@ const CountryStats = ({country}: countryStatsProps) => {
 
   const {mode} = useStateContext()
 
+  const a = country?.languages
+
   return (
     <div className={`w-[18rem] md:w-[40rem] mb-12 ${mode? 'bg-slate-400 text-black': 'bg-zinc-800 text-slate-200'} flex flex-col brightness-125`}>
       <img className='' src={country?.flags.svg} />
