@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStateContext } from '../context/Mode'
-import { CountryProps } from '../main'
+import { CountryProps } from '../interface/countryInterface'
 
 interface countryStatsProps {
   country: CountryProps | null

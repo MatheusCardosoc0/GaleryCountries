@@ -3,7 +3,7 @@ import Countries from './components/Countries'
 import CountryStats from './components/CountryStats'
 import Header from './components/Header'
 import { useStateContext } from './context/Mode'
-import { CountryProps } from './main'
+import { CountryProps } from './interface/countryInterface'
 
 const App = () => {
 
