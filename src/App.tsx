@@ -62,6 +62,7 @@ const App = () => {
           :
           <CountryStats country={countryStats} />}
       </div>
+      <div className={` ${mode? 'bg-stone-200' : 'bg-zinc-900'} h-screen`} />
     </body>
   )
 }
